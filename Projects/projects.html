@@ -4,108 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Projects - HeyImNas</title>
-    <style>
-        :root {
-            --bg-color: #f6f8fa;
-            --text-color: #24292e;
-            --accent-color: #3498db;
-            --border-color: #e1e4e8;
-            --card-bg: #ffffff;
-            --tag-bg: #e1e4e8;
-        }
-
-        [data-theme="dark"] {
-            --bg-color: #1a1a1a;
-            --text-color: #e1e4e8;
-            --accent-color: #3498db;
-            --border-color: #404448;
-            --card-bg: #2d2d2d;
-            --tag-bg: #404448;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            line-height: 1.6;
-            padding: 2rem;
-            margin: 0;
-            transition: background-color 0.3s, color 0.3s;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 3rem;
-        }
-
-        h1 {
-            font-size: 2.5rem;
-            color: var(--accent-color);
-            margin-bottom: 1rem;
-        }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .project-card {
-            background: var(--card-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            transition: transform 0.3s;
-        }
-
-        .project-card:hover {
-            transform: translateY(-5px);
-        }
-
-        .project-card h2 {
-            color: var(--accent-color);
-            margin-top: 0;
-            margin-bottom: 1rem;
-        }
-
-        .project-card p {
-            margin-bottom: 1rem;
-        }
-
-        .tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-
-        .tag {
-            background: var(--tag-bg);
-            color: var(--text-color);
-            padding: 0.25rem 0.75rem;
-            border-radius: 15px;
-            font-size: 0.875rem;
-        }
-
-        .project-links {
-            display: flex;
-            gap: 1rem;
-        }
-
-        .project-links a {
-            color: var(--accent-color);
-            text-decoration: none;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .project-links a:hover {
-            text-decoration: underline;
-        }
-    </style>
+    <link rel="stylesheet" href="projects.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
@@ -162,6 +61,21 @@
                 </a>
                 <a href="#" target="_blank">
                     <i class="fas fa-external-link-alt"></i> Live Demo
+                </a>
+            </div>
+        </div>
+
+
+
+        <div class="project-card">
+            <h2>Forensics File Recovery</h2>
+            <div class="tags">
+                <span class="tag">Digital Forensics</span>
+            </div>
+            <p>Recovering deleted files from a disk image using tools like FTK and Cellebrite.</p>
+            <div class="project-links">
+                <a href="#" target="_blank">
+                    <i class="fab fa-github"></i> View Source
                 </a>
             </div>
         </div>

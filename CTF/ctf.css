@@ -358,6 +358,7 @@
     zero-md::part(markdown-body) .token {
       color: inherit !important;
     }
+   
 
     .tag-filter {
       display: flex;
