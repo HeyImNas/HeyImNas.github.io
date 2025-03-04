@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - HeyImNas</title>
+    <style>
+        :root {
+            --bg-color: #f6f8fa;
+            --text-color: #24292e;
+            --accent-color: #3498db;
+            --border-color: #e1e4e8;
+            --section-bg: #ffffff;
+        }
+
+        [data-theme="dark"] {
+            --bg-color: #1a1a1a;
+            --text-color: #e1e4e8;
+            --accent-color: #3498db;
+            --border-color: #404448;
+            --section-bg: #2d2d2d;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 2rem;
+            margin: 0;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1rem;
+        }
+
+        .section {
+            background: var(--section-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .section h2 {
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 1.5rem;
+        }
+
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .skill-category {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 1.5rem;
+        }
+
+        .skill-category h3 {
+            color: var(--accent-color);
+            margin-top: 0;
+            margin-bottom: 1rem;
+        }
+
+        .skill-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .skill-list li {
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .skill-list li i {
+            color: var(--accent-color);
+            margin-right: 0.5rem;
+        }
+
+        .contact-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-links a {
+            color: var(--accent-color);
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .contact-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>About Me</h1>
+            <p>Cybersecurity Professional & CTF Enthusiast</p>
+        </div>
+
+        <div class="section">
+            <h2>Professional Background</h2>
+            <p>
+                I am a passionate cybersecurity professional with a strong focus on offensive security and CTF competitions.
+                My journey in the field of information security began with a curiosity about how systems work and how they
+                can be secured against various threats.
+            </p>
+            <p>
+                Through participating in numerous CTF competitions and security research projects, I've developed a deep
+                understanding of various security concepts and practical exploitation techniques. I enjoy sharing my
+                knowledge through detailed write-ups and contributing to the security community.
+            </p>
+        </div>
+
+        <div class="section">
+            <h2>Skills & Expertise</h2>
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h3>Security</h3>
+                    <ul class="skill-list">
+                        <li><i class="fas fa-shield-alt"></i> Penetration Testing</li>
+                        <li><i class="fas fa-bug"></i> Vulnerability Assessment</li>
+                        <li><i class="fas fa-lock"></i> Web Security</li>
+                        <li><i class="fas fa-network-wired"></i> Network Security</li>
+                    </ul>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Programming</h3>
+                    <ul class="skill-list">
+                        <li><i class="fab fa-python"></i> Python</li>
+                        <li><i class="fab fa-js"></i> JavaScript</li>
+                        <li><i class="fas fa-code"></i> C/C++</li>
+                        <li><i class="fab fa-html5"></i> HTML/CSS</li>
+                    </ul>
+                </div>
+
+                <div class="skill-category">
+                    <h3>Tools & Platforms</h3>
+                    <ul class="skill-list">
+                        <li><i class="fab fa-linux"></i> Linux</li>
+                        <li><i class="fas fa-terminal"></i> Bash Scripting</li>
+                        <li><i class="fas fa-tools"></i> Security Tools</li>
+                        <li><i class="fas fa-server"></i> Docker</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>Get in Touch</h2>
+            <p>
+                I'm always interested in collaborating on security projects or discussing CTF challenges. Feel free to
+                reach out through any of the following platforms:
+            </p>
+            <div class="contact-links">
+                <a href="https://github.com/HeyImNas" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="https://twitter.com/HeyImNas" target="_blank">
+                    <i class="fab fa-twitter"></i> Twitter
+                </a>
+                <a href="https://twitch.tv/heyimnas" target="_blank" aria-label="Twitch">
+                    <i class="fab fa-twitch"></i> Twitch
+                  </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

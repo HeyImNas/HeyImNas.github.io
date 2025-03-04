@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hacking Notes - CTF Write-ups</title>
+  <!-- Import zero-md -->
+  <script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@2/dist/zero-md.min.js"></script>
+  <link rel="stylesheet" href="ctf.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+  <header>
+    <h1>Hacking Notes</h1>
+    <p>My collection of CTF and Hackathon write-ups</p>
+    <div id="tag-filter" class="tag-filter">
+      <!-- Tags will be dynamically added here -->
+    </div>
+  </header>
+
+  <div id="writeups-container">
+    <!-- Write-ups will be dynamically loaded here -->
+    </div>
+
+  <script>
+    // Configuration for your CTF platforms and write-ups
+    let platforms = [];
+
+    // Fetch the platforms data from the JSON file
+    fetch('writeups.json')
+      .then(response => response.json())
+      .then(data => {
+        platforms = data.platforms;
+        // Initialize the page after data is loaded
+        createTagFilters();
+        generateWriteups();
+      })
+      .catch(error => {
+        console.error('Error loading writeups:', error);
+      });
+
+    // Get all unique tags from all writeups
+    function getAllUniqueTags() {
+      const tags = new Set();
+      platforms.forEach(platform => {
+        platform.writeups.forEach(writeup => {
+          writeup.tags.forEach(tag => tags.add(tag));
+        });
+      });
+      return Array.from(tags);
+    }
+
+    // Create tag filter buttons
+    function createTagFilters() {
+      const tagFilter = document.getElementById('tag-filter');
+      const uniqueTags = getAllUniqueTags();
+      
+      uniqueTags.forEach(tag => {
+        const tagButton = document.createElement('button');
+        tagButton.className = 'tag-button';
+        tagButton.textContent = tag;
+        tagButton.onclick = () => toggleTagFilter(tag);
+        tagFilter.appendChild(tagButton);
+      });
+    }
+
+    // Toggle tag filter
+    function toggleTagFilter(tag) {
+      const tagButton = Array.from(document.getElementsByClassName('tag-button'))
+        .find(button => button.textContent === tag);
+      
+      tagButton.classList.toggle('active');
+      filterWriteups();
+    }
+
+    // Filter writeups based on selected tags
+    function filterWriteups() {
+      const activeTags = Array.from(document.getElementsByClassName('tag-button active'))
+        .map(button => button.textContent);
+      
+      const writeupItems = document.getElementsByClassName('writeup-item');
+      
+      Array.from(writeupItems).forEach(item => {
+        const writeupTags = JSON.parse(item.dataset.tags);
+        const hasMatchingTags = activeTags.length === 0 || 
+          activeTags.every(tag => writeupTags.includes(tag));
+        
+        item.style.display = hasMatchingTags ? 'block' : 'none';
+      });
+    }
+
+    // Function to generate the HTML structure
+    function generateWriteups() {
+      const container = document.getElementById('writeups-container');
+      
+      platforms.forEach(platform => {
+        // Create platform dropdown
+        const platformDropdown = document.createElement('div');
+        platformDropdown.className = 'dropdown';
+        
+        // Create platform header
+        const platformHeader = document.createElement('div');
+        platformHeader.className = 'platform-header';
+        platformHeader.onclick = () => togglePlatform(`${platform.id}-writeups`);
+        platformHeader.innerHTML = `
+          <h2>${platform.name}</h2>
+          <i class="fas fa-caret-down"></i>
+        `;
+        
+        // Create writeups container
+        const writeupContainer = document.createElement('div');
+        writeupContainer.id = `${platform.id}-writeups`;
+        writeupContainer.className = 'writeups-container';
+        
+        // Add the first platform as active by default
+        if (platform === platforms[0]) {
+          writeupContainer.classList.add('active');
+          platformHeader.classList.add('active');
+        }
+        
+        // Generate writeup items
+        platform.writeups.forEach(writeup => {
+          const writeupItem = document.createElement('div');
+          writeupItem.className = 'writeup-item';
+          writeupItem.dataset.tags = JSON.stringify(writeup.tags);
+          
+          // Generate difficulty tag
+          const difficultyClass = `tag-${writeup.difficulty.toLowerCase()}`;
+          
+          // Create writeup header
+          const writeupHeader = document.createElement('div');
+          writeupHeader.className = 'writeup-header';
+          writeupHeader.onclick = () => toggleWriteup(`${writeup.id}`);
+          writeupHeader.innerHTML = `
+            <div>
+              <strong>${writeup.title}</strong>
+              <span class="tag ${difficultyClass}">${writeup.difficulty.charAt(0).toUpperCase() + writeup.difficulty.slice(1)}</span>
+            </div>
+            <i class="fas fa-caret-down"></i>
+          `;
+          
+          // Create writeup content
+          const writeupContent = document.createElement('div');
+          writeupContent.id = writeup.id;
+          writeupContent.className = 'writeup-content';
+          
+          // Add metadata
+          const metaDiv = document.createElement('div');
+          metaDiv.className = 'meta';
+          metaDiv.innerHTML = `
+            <span class="meta-item">🗓️ ${writeup.date}</span>
+            ${writeup.tags.map(tag => `<span class="meta-item">🏷️ ${tag}</span>`).join('')}
+          `;
+          
+          // Create zero-md element
+          const zeroMd = document.createElement('zero-md');
+          zeroMd.setAttribute('src', writeup.path);
+          
+          // Append elements
+          writeupContent.appendChild(metaDiv);
+          writeupContent.appendChild(zeroMd);
+          writeupItem.appendChild(writeupHeader);
+          writeupItem.appendChild(writeupContent);
+          writeupContainer.appendChild(writeupItem);
+        });
+        
+        // Append to DOM
+        platformDropdown.appendChild(platformHeader);
+        platformDropdown.appendChild(writeupContainer);
+        container.appendChild(platformDropdown);
+      });
+    }
+
+    // Toggle platform visibility
+    function togglePlatform(id) {
+      const element = document.getElementById(id);
+      const header = element.previousElementSibling;
+      element.classList.toggle('active');
+      header.classList.toggle('active');
+    }
+
+    // Toggle writeup visibility
+    function toggleWriteup(id) {
+      const element = document.getElementById(id);
+      const header = element.previousElementSibling;
+      element.classList.toggle('active');
+      header.classList.toggle('active');
+    }
+  </script>
+</body>
+</html>

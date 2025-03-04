@@ -3,230 +3,111 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Hack Notes - CTF Write-ups</title>
-  <!-- Import zero-md -->
-  <script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@2/dist/zero-md.min.js"></script>
-  <link rel="stylesheet" href="index.css">
+  <title>HeyImNas - Portfolio</title>
+  <link rel="stylesheet" href="styles/main.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
-  <header>
-    <h1>Hack Notes</h1>
-    <p>My collection of CTF and Hackathon write-ups</p>
-    <div id="tag-filter" class="tag-filter">
-      <!-- Tags will be dynamically added here -->
+  <nav class="sidebar">
+    <div class="nav-header">
+      <h1>HeyImNas</h1>
+      <button class="theme-toggle" aria-label="Toggle dark mode">
+        <i class="fas fa-moon"></i>
+      </button>
     </div>
-  </header>
+    <ul class="nav-links">
+      <li class="nav-item active" data-page="home">
+        <i class="fas fa-home"></i>
+        Home
+      </li>
+      <li class="nav-item" data-page="ctf">
+        <i class="fas fa-flag"></i>
+        CTF Write-ups
+      </li>
+      <li class="nav-item" data-page="projects">
+        <i class="fas fa-code"></i>
+        Projects
+      </li>
+      <li class="nav-item" data-page="about">
+        <i class="fas fa-user"></i>
+        About
+      </li>
+    </ul>
+    <div class="social-links">
+      <a href="https://github.com/HeyImNas" target="_blank" aria-label="GitHub">
+        <i class="fab fa-github"></i>
+      </a>
+      <a href="https://twitter.com/HeyImNas" target="_blank" aria-label="Twitter">
+        <i class="fab fa-twitter"></i>
+      </a>
+      <a href="https://twitch.tv/heyimnas" target="_blank" aria-label="Twitch">
+        <i class="fab fa-twitch"></i>
+      </a>
+    </div>
+  </nav>
 
-  <div id="writeups-container">
-    <!-- Write-ups will be dynamically loaded here -->
-  </div>
+  <main class="content">
+    <iframe id="pageFrame" class="page-iframe" src="home.html" title="Page content"></iframe>
+  </main>
 
   <script>
-    // Configuration for your CTF platforms and write-ups
-    const platforms = [
-      {
-        id: 'htb',
-        name: 'HackTheBox',
-        writeups: [
-          {
-            id: 'delivery',
-            title: 'Delivery',
-            difficulty: 'easy',
-            date: 'March 4, 2025',
-            tags: ['Linux', 'Email', 'MatterMost'],
-            path: 'CTF/HTB/delivery.md'
-          },
-          {
-            id: 'script-kiddie',
-            title: 'ScriptKiddie',
-            difficulty: 'easy',
-            date: 'February 28, 2025',
-            tags: ['Linux', 'Metasploit', 'Command Injection'],
-            path: 'writeups/htb/script-kiddie.md'
-          }
-        ]
-      },
-      {
-        id: 'thm',
-        name: 'TryHackMe',
-        writeups: [
-          {
-            id: 'mrrobot',
-            title: 'Mr. Robot CTF',
-            difficulty: 'medium',
-            date: 'March 1, 2025',
-            tags: ['Linux', 'WordPress', 'Privilege Escalation'],
-            path: 'writeups/thm/mrrobot.md'
-          }
-        ]
-      },
-      {
-        id: 'misc',
-        name: 'Miscellaneous CTFs',
-        writeups: [
-          {
-            id: 'picoctf-buffer',
-            title: 'PicoCTF 2024 - Buffer Overflow',
-            difficulty: 'hard',
-            date: 'March 3, 2025',
-            tags: ['Binary Exploitation'],
-            path: 'writeups/misc/picoctf-buffer.md'
-          }
-        ]
+    // Theme management
+    const themeToggle = document.querySelector('.theme-toggle');
+    const themeIcon = themeToggle.querySelector('i');
+    const iframe = document.getElementById('pageFrame');
+
+    function setTheme(isDark) {
+      document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      themeIcon.className = isDark ? 'fas fa-sun' : 'fas fa-moon';
+      localStorage.setItem('theme', isDark ? 'dark' : 'light');
+      
+      // Update theme in iframe
+      try {
+        const iframeDoc = iframe.contentWindow.document;
+        iframeDoc.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      } catch (e) {
+        console.log('Could not set iframe theme');
       }
-    ];
+    }
 
-    // Get all unique tags from all writeups
-    function getAllUniqueTags() {
-      const tags = new Set();
-      platforms.forEach(platform => {
-        platform.writeups.forEach(writeup => {
-          writeup.tags.forEach(tag => tags.add(tag));
-        });
+    // Initialize theme
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    setTheme(savedTheme === 'dark');
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      setTheme(!isDark);
+    });
+
+    // Navigation
+    const navItems = document.querySelectorAll('.nav-item');
+    const pages = {
+      'home': 'home.html',
+      'ctf': 'ctf.html',
+      'projects': 'projects.html',
+      'about': 'about.html'
+    };
+
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        // Update active state
+        navItems.forEach(nav => nav.classList.remove('active'));
+        item.classList.add('active');
+
+        // Load page
+        const page = item.getAttribute('data-page');
+        iframe.src = pages[page];
       });
-      return Array.from(tags);
-    }
+    });
 
-    // Create tag filter buttons
-    function createTagFilters() {
-      const tagFilter = document.getElementById('tag-filter');
-      const uniqueTags = getAllUniqueTags();
-      
-      uniqueTags.forEach(tag => {
-        const tagButton = document.createElement('button');
-        tagButton.className = 'tag-button';
-        tagButton.textContent = tag;
-        tagButton.onclick = () => toggleTagFilter(tag);
-        tagFilter.appendChild(tagButton);
-      });
-    }
-
-    // Toggle tag filter
-    function toggleTagFilter(tag) {
-      const tagButton = Array.from(document.getElementsByClassName('tag-button'))
-        .find(button => button.textContent === tag);
-      
-      tagButton.classList.toggle('active');
-      filterWriteups();
-    }
-
-    // Filter writeups based on selected tags
-    function filterWriteups() {
-      const activeTags = Array.from(document.getElementsByClassName('tag-button active'))
-        .map(button => button.textContent);
-      
-      const writeupItems = document.getElementsByClassName('writeup-item');
-      
-      Array.from(writeupItems).forEach(item => {
-        const writeupTags = JSON.parse(item.dataset.tags);
-        const hasMatchingTags = activeTags.length === 0 || 
-          activeTags.every(tag => writeupTags.includes(tag));
-        
-        item.style.display = hasMatchingTags ? 'block' : 'none';
-      });
-    }
-
-    // Function to generate the HTML structure
-    function generateWriteups() {
-      const container = document.getElementById('writeups-container');
-      
-      platforms.forEach(platform => {
-        // Create platform dropdown
-        const platformDropdown = document.createElement('div');
-        platformDropdown.className = 'dropdown';
-        
-        // Create platform header
-        const platformHeader = document.createElement('div');
-        platformHeader.className = 'platform-header';
-        platformHeader.onclick = () => togglePlatform(`${platform.id}-writeups`);
-        platformHeader.innerHTML = `
-          <h2>${platform.name}</h2>
-          <span>▼</span>
-        `;
-        
-        // Create writeups container
-        const writeupContainer = document.createElement('div');
-        writeupContainer.id = `${platform.id}-writeups`;
-        writeupContainer.className = 'writeups-container';
-        
-        // Add the first platform as active by default
-        if (platform === platforms[0]) {
-          writeupContainer.classList.add('active');
-        }
-        
-        // Generate writeup items
-        platform.writeups.forEach(writeup => {
-          const writeupItem = document.createElement('div');
-          writeupItem.className = 'writeup-item';
-          writeupItem.dataset.tags = JSON.stringify(writeup.tags);
-          
-          // Generate difficulty tag
-          const difficultyClass = `tag-${writeup.difficulty.toLowerCase()}`;
-          
-          // Create writeup header
-          const writeupHeader = document.createElement('div');
-          writeupHeader.className = 'writeup-header';
-          writeupHeader.onclick = () => toggleWriteup(`${writeup.id}`);
-          writeupHeader.innerHTML = `
-            <div>
-              <strong>${writeup.title}</strong>
-              <span class="tag ${difficultyClass}">${writeup.difficulty.charAt(0).toUpperCase() + writeup.difficulty.slice(1)}</span>
-            </div>
-            <span>▼</span>
-          `;
-          
-          // Create writeup content
-          const writeupContent = document.createElement('div');
-          writeupContent.id = writeup.id;
-          writeupContent.className = 'writeup-content';
-          
-          // Add metadata
-          const metaDiv = document.createElement('div');
-          metaDiv.className = 'meta';
-          metaDiv.innerHTML = `
-            <span class="meta-item">🗓️ ${writeup.date}</span>
-            ${writeup.tags.map(tag => `<span class="meta-item">🏷️ ${tag}</span>`).join('')}
-          `;
-          
-          // Create zero-md element
-          const zeroMd = document.createElement('zero-md');
-          zeroMd.setAttribute('src', writeup.path);
-          
-          // Append elements
-          writeupContent.appendChild(metaDiv);
-          writeupContent.appendChild(zeroMd);
-          writeupItem.appendChild(writeupHeader);
-          writeupItem.appendChild(writeupContent);
-          writeupContainer.appendChild(writeupItem);
-        });
-        
-        // Append to DOM
-        platformDropdown.appendChild(platformHeader);
-        platformDropdown.appendChild(writeupContainer);
-        container.appendChild(platformDropdown);
-      });
-    }
-
-    // Toggle platform visibility
-    function togglePlatform(id) {
-      const element = document.getElementById(id);
-      element.classList.toggle('active');
-      const arrow = element.previousElementSibling.querySelector('span');
-      arrow.textContent = element.classList.contains('active') ? '▼' : '►';
-    }
-
-    // Toggle writeup visibility
-    function toggleWriteup(id) {
-      const element = document.getElementById(id);
-      element.classList.toggle('active');
-      const arrow = element.previousElementSibling.querySelector('span');
-      arrow.textContent = element.classList.contains('active') ? '▼' : '►';
-    }
-
-    // Initialize the page
-    document.addEventListener('DOMContentLoaded', () => {
-      createTagFilters();
-      generateWriteups();
+    // Handle iframe load events
+    iframe.addEventListener('load', () => {
+      try {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        iframe.contentWindow.document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+      } catch (e) {
+        console.log('Could not set iframe theme');
+      }
     });
   </script>
 </body>

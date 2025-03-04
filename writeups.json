@@ -1,0 +1,54 @@
+{
+  "platforms": [
+    {
+      "id": "htb",
+      "name": "HackTheBox",
+      "writeups": [
+        {
+          "id": "delivery",
+          "title": "Delivery",
+          "difficulty": "easy",
+          "date": "March 4, 2025",
+          "tags": ["Linux", "Email", "MatterMost"],
+          "path": "CTF/HTB/delivery.md"
+        },
+        {
+          "id": "script-kiddie",
+          "title": "ScriptKiddie",
+          "difficulty": "easy",
+          "date": "February 28, 2025",
+          "tags": ["Linux", "Metasploit", "Command Injection"],
+          "path": "writeups/htb/script-kiddie.md"
+        }
+      ]
+    },
+    {
+      "id": "thm",
+      "name": "TryHackMe",
+      "writeups": [
+        {
+          "id": "mrrobot",
+          "title": "Mr. Robot CTF",
+          "difficulty": "medium",
+          "date": "March 1, 2025",
+          "tags": ["Linux", "WordPress", "Privilege Escalation"],
+          "path": "writeups/thm/mrrobot.md"
+        }
+      ]
+    },
+    {
+      "id": "misc",
+      "name": "Miscellaneous CTFs",
+      "writeups": [
+        {
+          "id": "picoctf-buffer",
+          "title": "PicoCTF 2024 - Buffer Overflow",
+          "difficulty": "hard",
+          "date": "March 3, 2025",
+          "tags": ["Binary Exploitation"],
+          "path": "writeups/misc/picoctf-buffer.md"
+        }
+      ]
+    }
+  ]
+} 
