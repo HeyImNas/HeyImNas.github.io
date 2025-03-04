@@ -1,35 +1,176 @@
----
-layout: default
----
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hack Notes - CTF Write-ups</title>
+  <!-- Import zero-md -->
+  <script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@2/dist/zero-md.min.js"></script>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+  <header>
+    <h1>Hack Notes</h1>
+    <p>My collection of CTF and Hackathon write-ups</p>
+  </header>
 
-<div class="platform-container">
-    <div class="select-wrapper">
-        <label for="hackthebox">HackTheBox Writeups</label>
-        <select id="hackthebox" class="platform-select" onchange="if (this.value) window.location.href=this.value">
-            <option value="">Select a writeup...</option>
-            {% for writeup in site.hackthebox %}
-                <option value="{{ writeup.url | relative_url }}">{{ writeup.title }}</option>
-            {% endfor %}
-        </select>
-    </div>
+  <div id="writeups-container">
+    <!-- Write-ups will be dynamically loaded here -->
+  </div>
 
-    <div class="select-wrapper">
-        <label for="tryhackme">TryHackMe Writeups</label>
-        <select id="tryhackme" class="platform-select" onchange="if (this.value) window.location.href=this.value">
-            <option value="">Select a writeup...</option>
-            {% for writeup in site.tryhackme %}
-                <option value="{{ writeup.url | relative_url }}">{{ writeup.title }}</option>
-            {% endfor %}
-        </select>
-    </div>
+  <script>
+    // Configuration for your CTF platforms and write-ups
+    const platforms = [
+      {
+        id: 'htb',
+        name: 'HackTheBox',
+        writeups: [
+          {
+            id: 'delivery',
+            title: 'Delivery',
+            difficulty: 'easy',
+            date: 'March 4, 2025',
+            tags: ['Linux', 'Email', 'MatterMost'],
+            path: 'CTF/HTB/delivery.md'
+          },
+          {
+            id: 'script-kiddie',
+            title: 'ScriptKiddie',
+            difficulty: 'easy',
+            date: 'February 28, 2025',
+            tags: ['Linux', 'Metasploit', 'Command Injection'],
+            path: 'writeups/htb/script-kiddie.md'
+          }
+        ]
+      },
+      {
+        id: 'thm',
+        name: 'TryHackMe',
+        writeups: [
+          {
+            id: 'mrrobot',
+            title: 'Mr. Robot CTF',
+            difficulty: 'medium',
+            date: 'March 1, 2025',
+            tags: ['Linux', 'WordPress', 'Privilege Escalation'],
+            path: 'writeups/thm/mrrobot.md'
+          }
+        ]
+      },
+      {
+        id: 'misc',
+        name: 'Miscellaneous CTFs',
+        writeups: [
+          {
+            id: 'picoctf-buffer',
+            title: 'PicoCTF 2024 - Buffer Overflow',
+            difficulty: 'hard',
+            date: 'March 3, 2025',
+            tags: ['Binary Exploitation'],
+            path: 'writeups/misc/picoctf-buffer.md'
+          }
+        ]
+      }
+    ];
 
-    <div class="select-wrapper">
-        <label for="picoctf">PicoCTF Writeups</label>
-        <select id="picoctf" class="platform-select" onchange="if (this.value) window.location.href=this.value">
-            <option value="">Select a writeup...</option>
-            {% for writeup in site.picoctf %}
-                <option value="{{ writeup.url | relative_url }}">{{ writeup.title }}</option>
-            {% endfor %}
-        </select>
-    </div>
-</div> 
+    // Function to generate the HTML structure
+    function generateWriteups() {
+      const container = document.getElementById('writeups-container');
+      
+      platforms.forEach(platform => {
+        // Create platform dropdown
+        const platformDropdown = document.createElement('div');
+        platformDropdown.className = 'dropdown';
+        
+        // Create platform header
+        const platformHeader = document.createElement('div');
+        platformHeader.className = 'platform-header';
+        platformHeader.onclick = () => togglePlatform(`${platform.id}-writeups`);
+        platformHeader.innerHTML = `
+          <h2>${platform.name}</h2>
+          <span>▼</span>
+        `;
+        
+        // Create writeups container
+        const writeupContainer = document.createElement('div');
+        writeupContainer.id = `${platform.id}-writeups`;
+        writeupContainer.className = 'writeups-container';
+        
+        // Add the first platform as active by default
+        if (platform === platforms[0]) {
+          writeupContainer.classList.add('active');
+        }
+        
+        // Generate writeup items
+        platform.writeups.forEach(writeup => {
+          const writeupItem = document.createElement('div');
+          writeupItem.className = 'writeup-item';
+          
+          // Generate difficulty tag
+          const difficultyClass = `tag-${writeup.difficulty.toLowerCase()}`;
+          
+          // Create writeup header
+          const writeupHeader = document.createElement('div');
+          writeupHeader.className = 'writeup-header';
+          writeupHeader.onclick = () => toggleWriteup(`${writeup.id}`);
+          writeupHeader.innerHTML = `
+            <div>
+              <strong>${writeup.title}</strong>
+              <span class="tag ${difficultyClass}">${writeup.difficulty.charAt(0).toUpperCase() + writeup.difficulty.slice(1)}</span>
+            </div>
+            <span>▼</span>
+          `;
+          
+          // Create writeup content
+          const writeupContent = document.createElement('div');
+          writeupContent.id = writeup.id;
+          writeupContent.className = 'writeup-content';
+          
+          // Add metadata
+          const metaDiv = document.createElement('div');
+          metaDiv.className = 'meta';
+          metaDiv.innerHTML = `
+            <span class="meta-item">🗓️ ${writeup.date}</span>
+            ${writeup.tags.map(tag => `<span class="meta-item">🏷️ ${tag}</span>`).join('')}
+          `;
+          
+          // Create zero-md element
+          const zeroMd = document.createElement('zero-md');
+          zeroMd.setAttribute('src', writeup.path);
+          
+          // Append elements
+          writeupContent.appendChild(metaDiv);
+          writeupContent.appendChild(zeroMd);
+          writeupItem.appendChild(writeupHeader);
+          writeupItem.appendChild(writeupContent);
+          writeupContainer.appendChild(writeupItem);
+        });
+        
+        // Append to DOM
+        platformDropdown.appendChild(platformHeader);
+        platformDropdown.appendChild(writeupContainer);
+        container.appendChild(platformDropdown);
+      });
+    }
+
+    // Toggle platform visibility
+    function togglePlatform(id) {
+      const element = document.getElementById(id);
+      element.classList.toggle('active');
+      const arrow = element.previousElementSibling.querySelector('span');
+      arrow.textContent = element.classList.contains('active') ? '▼' : '►';
+    }
+
+    // Toggle writeup visibility
+    function toggleWriteup(id) {
+      const element = document.getElementById(id);
+      element.classList.toggle('active');
+      const arrow = element.previousElementSibling.querySelector('span');
+      arrow.textContent = element.classList.contains('active') ? '▼' : '►';
+    }
+
+    // Initialize the page
+    document.addEventListener('DOMContentLoaded', generateWriteups);
+  </script>
+</body>
+</html>
