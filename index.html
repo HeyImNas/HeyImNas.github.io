@@ -12,6 +12,9 @@
   <header>
     <h1>Hack Notes</h1>
     <p>My collection of CTF and Hackathon write-ups</p>
+    <div id="tag-filter" class="tag-filter">
+      <!-- Tags will be dynamically added here -->
+    </div>
   </header>
 
   <div id="writeups-container">
@@ -73,6 +76,56 @@
       }
     ];
 
+    // Get all unique tags from all writeups
+    function getAllUniqueTags() {
+      const tags = new Set();
+      platforms.forEach(platform => {
+        platform.writeups.forEach(writeup => {
+          writeup.tags.forEach(tag => tags.add(tag));
+        });
+      });
+      return Array.from(tags);
+    }
+
+    // Create tag filter buttons
+    function createTagFilters() {
+      const tagFilter = document.getElementById('tag-filter');
+      const uniqueTags = getAllUniqueTags();
+      
+      uniqueTags.forEach(tag => {
+        const tagButton = document.createElement('button');
+        tagButton.className = 'tag-button';
+        tagButton.textContent = tag;
+        tagButton.onclick = () => toggleTagFilter(tag);
+        tagFilter.appendChild(tagButton);
+      });
+    }
+
+    // Toggle tag filter
+    function toggleTagFilter(tag) {
+      const tagButton = Array.from(document.getElementsByClassName('tag-button'))
+        .find(button => button.textContent === tag);
+      
+      tagButton.classList.toggle('active');
+      filterWriteups();
+    }
+
+    // Filter writeups based on selected tags
+    function filterWriteups() {
+      const activeTags = Array.from(document.getElementsByClassName('tag-button active'))
+        .map(button => button.textContent);
+      
+      const writeupItems = document.getElementsByClassName('writeup-item');
+      
+      Array.from(writeupItems).forEach(item => {
+        const writeupTags = JSON.parse(item.dataset.tags);
+        const hasMatchingTags = activeTags.length === 0 || 
+          activeTags.every(tag => writeupTags.includes(tag));
+        
+        item.style.display = hasMatchingTags ? 'block' : 'none';
+      });
+    }
+
     // Function to generate the HTML structure
     function generateWriteups() {
       const container = document.getElementById('writeups-container');
@@ -105,6 +158,7 @@
         platform.writeups.forEach(writeup => {
           const writeupItem = document.createElement('div');
           writeupItem.className = 'writeup-item';
+          writeupItem.dataset.tags = JSON.stringify(writeup.tags);
           
           // Generate difficulty tag
           const difficultyClass = `tag-${writeup.difficulty.toLowerCase()}`;
@@ -170,7 +224,10 @@
     }
 
     // Initialize the page
-    document.addEventListener('DOMContentLoaded', generateWriteups);
+    document.addEventListener('DOMContentLoaded', () => {
+      createTagFilters();
+      generateWriteups();
+    });
   </script>
 </body>
 </html>
