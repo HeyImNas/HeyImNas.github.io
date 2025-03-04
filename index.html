@@ -2,38 +2,34 @@
 layout: default
 ---
 
-<div class="platform-section">
-    <button class="dropdown-btn">
-        HackTheBox
-        <i class="fas fa-chevron-down"></i>
-    </button>
-    <div class="dropdown-content">
-        {% for writeup in site.hackthebox %}
-            <a href="{{ writeup.url | relative_url }}">{{ writeup.title }}</a>
-        {% endfor %}
+<div class="platform-container">
+    <div class="select-wrapper">
+        <label for="hackthebox">HackTheBox Writeups</label>
+        <select id="hackthebox" class="platform-select" onchange="if (this.value) window.location.href=this.value">
+            <option value="">Select a writeup...</option>
+            {% for writeup in site.hackthebox %}
+                <option value="{{ writeup.url | relative_url }}">{{ writeup.title }}</option>
+            {% endfor %}
+        </select>
     </div>
-</div>
 
-<div class="platform-section">
-    <button class="dropdown-btn">
-        TryHackMe
-        <i class="fas fa-chevron-down"></i>
-    </button>
-    <div class="dropdown-content">
-        {% for writeup in site.tryhackme %}
-            <a href="{{ writeup.url | relative_url }}">{{ writeup.title }}</a>
-        {% endfor %}
+    <div class="select-wrapper">
+        <label for="tryhackme">TryHackMe Writeups</label>
+        <select id="tryhackme" class="platform-select" onchange="if (this.value) window.location.href=this.value">
+            <option value="">Select a writeup...</option>
+            {% for writeup in site.tryhackme %}
+                <option value="{{ writeup.url | relative_url }}">{{ writeup.title }}</option>
+            {% endfor %}
+        </select>
     </div>
-</div>
 
-<div class="platform-section">
-    <button class="dropdown-btn">
-        PicoCTF
-        <i class="fas fa-chevron-down"></i>
-    </button>
-    <div class="dropdown-content">
-        {% for writeup in site.picoctf %}
-            <a href="{{ writeup.url | relative_url }}">{{ writeup.title }}</a>
-        {% endfor %}
+    <div class="select-wrapper">
+        <label for="picoctf">PicoCTF Writeups</label>
+        <select id="picoctf" class="platform-select" onchange="if (this.value) window.location.href=this.value">
+            <option value="">Select a writeup...</option>
+            {% for writeup in site.picoctf %}
+                <option value="{{ writeup.url | relative_url }}">{{ writeup.title }}</option>
+            {% endfor %}
+        </select>
     </div>
 </div> 
