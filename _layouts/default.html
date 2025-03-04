@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ site.title }}</title>
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="container">
+                <h1><a href="{{ '/' | relative_url }}">{{ site.title }}</a></h1>
+                <div class="nav-links">
+                    <a href="{{ '/' | relative_url }}">Home</a>
+                    <a href="{{ '/about' | relative_url }}">About</a>
+                    <a href="https://github.com/HeyImNas" target="_blank">GitHub</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="container">
+        {{ content }}
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; {{ site.time | date: '%Y' }} {{ site.title }}. Built with Jekyll.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Add click event listeners to all dropdown buttons
+        document.addEventListener('DOMContentLoaded', function() {
+            var dropdowns = document.getElementsByClassName('dropdown-btn');
+            for (var i = 0; i < dropdowns.length; i++) {
+                dropdowns[i].addEventListener('click', function() {
+                    this.classList.toggle('active');
+                    var dropdownContent = this.nextElementSibling;
+                    if (dropdownContent.style.maxHeight) {
+                        dropdownContent.style.maxHeight = null;
+                    } else {
+                        dropdownContent.style.maxHeight = dropdownContent.scrollHeight + "px";
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html> 
