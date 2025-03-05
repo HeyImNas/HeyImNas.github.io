@@ -6,6 +6,7 @@
     <title>Projects - HeyImNas</title>
     <link rel="stylesheet" href="projects.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@2/dist/zero-md.min.js"></script>
 </head>
 <body>
     <div class="header">
@@ -65,20 +66,63 @@
             </div>
         </div>
 
-
-
-        <div class="project-card">
+        <div class="project-card" id="forensics-card">
             <h2>Forensics File Recovery</h2>
             <div class="tags">
                 <span class="tag">Digital Forensics</span>
             </div>
             <p>Recovering deleted files from a disk image using tools like FTK and Cellebrite.</p>
             <div class="project-links">
+                <a href="#" class="view-details" data-project="forensics">
+                    <i class="fas fa-book"></i> View Details
+                </a>
                 <a href="#" target="_blank">
                     <i class="fab fa-github"></i> View Source
                 </a>
             </div>
         </div>
     </div>
+
+    <div class="markdown-container" id="forensics-content" style="display: none;">
+        <div class="markdown-header">
+            <h2>Forensics File Recovery</h2>
+            <button class="close-btn"><i class="fas fa-times"></i></button>
+        </div>
+        <zero-md src="markdown/Digital_Forensics/FileRecovery/FileRecovery.md">
+            <template>
+                <style>
+                    :host {
+                        --md-text-color: var(--text-color);
+                        --md-bg-color: var(--card-bg);
+                        --md-code-bg: var(--tag-bg);
+                    }
+                </style>
+            </template>
+        </zero-md>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const viewDetailsLinks = document.querySelectorAll('.view-details');
+            const markdownContainers = document.querySelectorAll('.markdown-container');
+            const closeBtns = document.querySelectorAll('.close-btn');
+
+            viewDetailsLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const projectId = this.getAttribute('data-project');
+                    const content = document.getElementById(`${projectId}-content`);
+                    content.style.display = 'block';
+                });
+            });
+
+            closeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const container = this.closest('.markdown-container');
+                    container.style.display = 'none';
+                });
+            });
+        });
+    </script>
 </body>
 </html> 
