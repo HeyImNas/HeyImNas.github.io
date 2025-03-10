@@ -10,7 +10,7 @@
           "difficulty": "easy",
           "date": "March 4, 2025",
           "tags": ["Linux", "Email", "MatterMost"],
-          "path": "CTF/HTB/delivery.md"
+          "path": "HTB/delivery.md"
         },
         {
           "id": "script-kiddie",
