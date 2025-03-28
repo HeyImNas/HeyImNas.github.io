@@ -7,13 +7,26 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:3000', 'https://heyimnas.github.io'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE']
+}));
 app.use(express.json());
 
 // MongoDB connection
-mongoose.connect(process.env.MONGO_URL, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true
+const MONGO_URI = "mongodb://mongo:fDxcRdzakGByEsbEUTqHtWPPUQgDazzZ@yamabiko.proxy.rlwy.net:38369";
+
+mongoose.connect(MONGO_URI)
+    .then(() => {
+        console.log('Successfully connected to MongoDB.');
+    })
+    .catch((error) => {
+        console.error('Error connecting to MongoDB:', error);
+    });
+
+// Add a test route to verify the server is running
+app.get('/', (req, res) => {
+    res.json({ message: 'Todo API is running' });
 });
 
 // Todo Schema
@@ -52,6 +65,7 @@ app.patch('/api/todos/:id', async (req, res) => {
             { completed: req.body.completed },
             { new: true }
         );
+        if (!todo) return res.status(404).json({ message: 'Todo not found' });
         res.json(todo);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -60,7 +74,8 @@ app.patch('/api/todos/:id', async (req, res) => {
 
 app.delete('/api/todos/:id', async (req, res) => {
     try {
-        await Todo.findByIdAndDelete(req.params.id);
+        const todo = await Todo.findByIdAndDelete(req.params.id);
+        if (!todo) return res.status(404).json({ message: 'Todo not found' });
         res.status(204).send();
     } catch (error) {
         res.status(400).json({ message: error.message });

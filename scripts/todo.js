@@ -1,9 +1,13 @@
 class TodoApp {
     constructor() {
-        // Replace this with your Railway deployment URL when deployed
-        this.apiUrl = window.location.hostname === 'localhost' 
-            ? 'http://localhost:3000/api/todos'
-            : 'https://your-railway-app-name.railway.app/api/todos'; // You'll update this URL once deployed
+        // Set the API URL based on the current environment
+        const isProduction = window.location.hostname !== 'localhost';
+        this.apiUrl = isProduction
+            ? 'https://todo-backend-production-1234.up.railway.app/api/todos'  // Replace with your actual Railway URL
+            : 'http://localhost:3000/api/todos';
+            
+        console.log('API URL:', this.apiUrl); // Debug log to verify URL
+        
         this.todoInput = document.getElementById('todoInput');
         this.addTodoBtn = document.getElementById('addTodoBtn');
         this.todoList = document.getElementById('todoList');
@@ -24,10 +28,12 @@ class TodoApp {
     async loadTodos() {
         try {
             const response = await fetch(this.apiUrl);
+            if (!response.ok) throw new Error('Failed to load todos');
             const todos = await response.json();
             this.renderTodos(todos);
         } catch (error) {
             console.error('Error loading todos:', error);
+            this.showError('Failed to load todos. Please try again later.');
         }
     }
 
@@ -43,40 +49,47 @@ class TodoApp {
                 },
                 body: JSON.stringify({
                     text,
-                    completed: false,
-                    createdAt: new Date().toISOString()
+                    completed: false
                 })
             });
 
+            if (!response.ok) throw new Error('Failed to add todo');
             const newTodo = await response.json();
             this.renderTodo(newTodo);
             this.todoInput.value = '';
         } catch (error) {
             console.error('Error adding todo:', error);
+            this.showError('Failed to add todo. Please try again.');
         }
     }
 
     async toggleTodo(id, completed) {
         try {
-            await fetch(`${this.apiUrl}/${id}`, {
+            const response = await fetch(`${this.apiUrl}/${id}`, {
                 method: 'PATCH',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({ completed })
             });
+
+            if (!response.ok) throw new Error('Failed to update todo');
         } catch (error) {
-            console.error('Error toggling todo:', error);
+            console.error('Error updating todo:', error);
+            this.showError('Failed to update todo. Please try again.');
         }
     }
 
     async deleteTodo(id) {
         try {
-            await fetch(`${this.apiUrl}/${id}`, {
+            const response = await fetch(`${this.apiUrl}/${id}`, {
                 method: 'DELETE'
             });
+
+            if (!response.ok) throw new Error('Failed to delete todo');
         } catch (error) {
             console.error('Error deleting todo:', error);
+            this.showError('Failed to delete todo. Please try again.');
         }
     }
 
@@ -89,7 +102,7 @@ class TodoApp {
         const todoItem = document.createElement('div');
         todoItem.className = `todo-item ${todo.completed ? 'completed' : ''}`;
         todoItem.innerHTML = `
-            <span class="todo-text">${todo.text}</span>
+            <span class="todo-text">${this.escapeHtml(todo.text)}</span>
             <div class="todo-actions">
                 <button class="complete-btn" title="${todo.completed ? 'Mark as incomplete' : 'Mark as complete'}">
                     <i class="fas ${todo.completed ? 'fa-times' : 'fa-check'}"></i>
@@ -117,6 +130,20 @@ class TodoApp {
         });
 
         this.todoList.appendChild(todoItem);
+    }
+
+    showError(message) {
+        // You could enhance this to show a nice error notification
+        alert(message);
+    }
+
+    escapeHtml(unsafe) {
+        return unsafe
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
     }
 }
 
