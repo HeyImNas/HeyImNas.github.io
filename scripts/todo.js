@@ -3,7 +3,7 @@ class TodoApp {
         // Set the API URL based on the current environment
         const isProduction = window.location.hostname !== 'localhost';
         this.apiUrl = isProduction
-            ? 'https://your-todo-backend.onrender.com/api/todos'  // Replace with your Render URL when you have it
+            ? 'https://todo-backend-9g1o.onrender.com/api/todos'  // Your actual Render URL
             : 'http://localhost:3000/api/todos';
             
         console.log('API URL:', this.apiUrl); // Debug log
