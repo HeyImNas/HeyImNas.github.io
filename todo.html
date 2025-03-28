@@ -9,13 +9,39 @@
 </head>
 <body>
     <div class="todo-container">
-        <h1>Todo List</h1>
+        <div class="header-row">
+            <h1>Todo List</h1>
+            <button id="darkModeToggle" class="dark-mode-toggle" title="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+        
+        <!-- Add Todo Input -->
         <div class="add-todo">
             <input type="text" id="todoInput" placeholder="Add a new task...">
             <button id="addTodoBtn">
                 <i class="fas fa-plus"></i>
             </button>
         </div>
+        
+        <!-- Filters -->
+        <div class="filters-container">
+            <div class="filter">
+                <label for="tagFilter">Filter by Tag:</label>
+                <select id="tagFilter">
+                    <option value="">All Tags</option>
+                </select>
+            </div>
+            
+            <div class="filter">
+                <label for="categoryFilter">Filter by Category:</label>
+                <select id="categoryFilter">
+                    <option value="">All Categories</option>
+                </select>
+            </div>
+        </div>
+        
+        <!-- Todo List -->
         <div class="todo-list" id="todoList">
             <!-- Todo items will be dynamically added here -->
         </div>
