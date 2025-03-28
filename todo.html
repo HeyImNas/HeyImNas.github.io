@@ -19,6 +19,11 @@
         <!-- Add Todo Input -->
         <div class="add-todo">
             <input type="text" id="todoInput" placeholder="Add a new task...">
+            <select id="importanceInput">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+            </select>
             <button id="addTodoBtn">
                 <i class="fas fa-plus"></i>
             </button>
@@ -37,6 +42,16 @@
                 <label for="categoryFilter">Filter by Category:</label>
                 <select id="categoryFilter">
                     <option value="">All Categories</option>
+                </select>
+            </div>
+            
+            <div class="filter">
+                <label for="importanceFilter">Filter by Importance:</label>
+                <select id="importanceFilter">
+                    <option value="">All Levels</option>
+                    <option value="low">Low</option>
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
                 </select>
             </div>
         </div>

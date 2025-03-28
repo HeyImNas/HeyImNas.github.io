@@ -7,6 +7,8 @@ class TodoApp {
         this.tagFilter = document.getElementById('tagFilter');
         this.categoryFilter = document.getElementById('categoryFilter');
         this.darkModeToggle = document.getElementById('darkModeToggle');
+        this.importanceInput = document.getElementById('importanceInput');
+        this.importanceFilter = document.getElementById('importanceFilter');
         
         // State
         this.todos = JSON.parse(localStorage.getItem('todos') || '[]');
@@ -38,6 +40,10 @@ class TodoApp {
         
         if (this.darkModeToggle) {
             this.darkModeToggle.addEventListener('click', () => this.toggleDarkMode());
+        }
+
+        if (this.importanceFilter) {
+            this.importanceFilter.addEventListener('change', () => this.filterTodos());
         }
     }
     
@@ -73,7 +79,8 @@ class TodoApp {
             completed: false,
             tags: [],
             category: '',
-            createdAt: new Date().toISOString()
+            createdAt: new Date().toISOString(),
+            importance: this.importanceInput.value
         };
         
         this.todos.unshift(newTodo);
@@ -179,11 +186,13 @@ class TodoApp {
     filterTodos() {
         const selectedTag = this.tagFilter ? this.tagFilter.value : '';
         const selectedCategory = this.categoryFilter ? this.categoryFilter.value : '';
+        const selectedImportance = this.importanceFilter ? this.importanceFilter.value : '';
         
         const filteredTodos = this.todos.filter(todo => {
             const matchesTag = !selectedTag || todo.tags.includes(selectedTag);
             const matchesCategory = !selectedCategory || todo.category === selectedCategory;
-            return matchesTag && matchesCategory;
+            const matchesImportance = !selectedImportance || todo.importance === selectedImportance;
+            return matchesTag && matchesCategory && matchesImportance;
         });
         
         this.renderTodos(filteredTodos);
