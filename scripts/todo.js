@@ -3,10 +3,10 @@ class TodoApp {
         // Set the API URL based on the current environment
         const isProduction = window.location.hostname !== 'localhost';
         this.apiUrl = isProduction
-            ? 'https://todo-backend-production-1234.up.railway.app/api/todos'  // Replace with your actual Railway URL
+            ? 'https://your-todo-backend.onrender.com/api/todos'  // Replace with your Render URL when you have it
             : 'http://localhost:3000/api/todos';
             
-        console.log('API URL:', this.apiUrl); // Debug log to verify URL
+        console.log('API URL:', this.apiUrl); // Debug log
         
         this.todoInput = document.getElementById('todoInput');
         this.addTodoBtn = document.getElementById('addTodoBtn');
